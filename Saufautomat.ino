@@ -28,26 +28,20 @@ void setup() {
   busy();
   pinMode(resetPin, INPUT_PULLUP);
   Serial.begin(9600);
-  printStats();
   lcd.begin(16, 2);
   bootAnimation();
   initSD();
   checkReset();
-  printStats();
   loadProgress();
-  printStats();
   pinMode(beerPin, INPUT_PULLUP);
   pinMode(shotsPin, INPUT_PULLUP);
   pinMode(nonAlcPin, INPUT_PULLUP);
   pinMode(longdrinkPin, INPUT_PULLUP);
-  printStats();
   idle();
-  printStats();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  printStats();
+  // put your main code here, to run repeatedly:  
   printBeverage("Beer", beers);
   awaitInput();
   printBeverage("Shots", shots);
@@ -56,22 +50,6 @@ void loop() {
   awaitInput();
   printBeverage("Non alcoholic", non_alcoholics);
   awaitInput();
-}
-
-void printStats() {
-    Serial.println("Stats:");
-    
-    Serial.print(beers);
-    Serial.println(" Beers");
-    
-    Serial.print(shots);
-    Serial.println(" Shots");
-    
-    Serial.print(longdrinks);
-    Serial.println(" Longdrinks");    
-    
-    Serial.print(non_alcoholics);
-    Serial.println(" Non-Alcoholics");
 }
 
 inline void clearLine() {
@@ -147,22 +125,11 @@ void loadProgress() {
   File myFile = SD.open(fileName);
   if (myFile) {
     myFile.seek(0);
-    Serial.println("Loading beverages:");
     beers = loadBeverage(myFile);
-    Serial.print(beers);
-    Serial.println(" Beers");
     shots = loadBeverage(myFile);
-    Serial.print(shots);
-    Serial.println(" Shots");
     longdrinks = loadBeverage(myFile);
-    Serial.print(longdrinks);
-    Serial.println(" Longdrinks");    
-    non_alcoholics = loadBeverage(myFile);
-    Serial.print(non_alcoholics);
-    Serial.println(" Non-Alcoholics");
+    non_alcoholics = loadBeverage(myFile);   
     myFile.close();
-  } else {
-    Serial.println("Cannot open file");
   }
 }
 
