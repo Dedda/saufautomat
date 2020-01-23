@@ -156,12 +156,16 @@ void idle() {
 }
 
 void bootAnimation() {
-  String line0 = "Saufautomat";
-  String line1 = "v0.1";
   lcd.setCursor(0, 0);
-  slowPrint(line0);
+  slowPrint("Saufautomat");
   lcd.setCursor(0, 1);
-  slowPrint(line1);
+  slowPrint("v0.1");
+  delay(1500);
+  lcd.setCursor(0, 0);
+  slowPrint("Follow me on");
+  lcd.setCursor(0, 1);
+  slowPrint("Github: @Dedda");
+  delay(1500);
 }
 
 void slowPrint(String line) {
