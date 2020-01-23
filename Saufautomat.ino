@@ -56,7 +56,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:  
-  printBeverage("Beer", beers);
+  printBeverage("Beers", beers);
   awaitInput();
   printBeverage("Shots", shots);
   awaitInput();
