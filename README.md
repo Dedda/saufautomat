@@ -30,3 +30,9 @@ These are the default SPI pins for the Mega 2560 and the CS pin.
 - MISO --> 50
 - SCK --> 52
 - CS --> 49
+
+## Example Build
+
+This is roughly what your build may look like with some really basic bread boards and jumper cables.
+
+![Example Build](images/example_build.png)
