@@ -5,23 +5,53 @@
 
 LiquidCrystal lcd(7, 6, 2, 3, 4, 5);
 
+const int N_BEV_TYPES = 4;
+
+struct Beverage {
+  int pin;
+  bool state;
+  String printName;
+  byte count;
+};
+
+enum beverage{
+  BEER,
+  SHOT,
+  LONGDRINK,
+  NON_ALCOHOL
+};
+
 const String fileName = "bevs";
 const int displayTime = 2500;
 
-const int beerPin = 16;
-bool beerState = HIGH;
-const int shotsPin = 15;
-bool shotsState = HIGH;
-const int nonAlcPin = 14;
-bool nonAlcState = HIGH;
-const int longdrinkPin = 8;
-bool longdrinkState = HIGH;
-const int resetPin = 49;
+Beverage beverages[N_BEV_TYPES] = {
+  {
+    16,
+    HIGH,
+    "Beers",
+    0
+  },
+  {
+    15,
+    HIGH,
+    "Shots",
+    0
+  },
+  {
+    14,
+    HIGH,
+    "Longdrinks",
+    0
+  },
+  {
+    8,
+    HIGH,
+    "Non alcoholic",
+    0
+  }
+};
 
-byte beers = 0;
-byte shots = 0;
-byte non_alcoholics = 0;
-byte longdrinks = 0;
+const int resetPin = 49;
 
 void setup() {
 
@@ -47,22 +77,22 @@ void setup() {
   initSD();
   checkReset();
   loadProgress();
-  pinMode(beerPin, INPUT_PULLUP);
-  pinMode(shotsPin, INPUT_PULLUP);
-  pinMode(nonAlcPin, INPUT_PULLUP);
-  pinMode(longdrinkPin, INPUT_PULLUP);
+  pinMode(beverages[BEER].pin, INPUT_PULLUP);
+  pinMode(beverages[SHOT].pin, INPUT_PULLUP);
+  pinMode(beverages[LONGDRINK].pin, INPUT_PULLUP);
+  pinMode(beverages[NON_ALCOHOL].pin, INPUT_PULLUP);
   idle();
 }
 
+int currentBeverage = 0;
+
 void loop() {
-  // put your main code here, to run repeatedly:  
-  printBeverage("Beers", beers);
-  awaitInput();
-  printBeverage("Shots", shots);
-  awaitInput();
-  printBeverage("Longdrinks", longdrinks);
-  awaitInput();
-  printBeverage("Non alcoholic", non_alcoholics);
+  // put your main code here, to run repeatedly:
+  currentBeverage++;
+  if (currentBeverage == N_BEV_TYPES) {
+    currentBeverage = 0;
+  }
+  printBeverage(currentBeverage);
   awaitInput();
 }
 
@@ -70,45 +100,45 @@ inline void clearLine() {
   lcd.print("                ");
 }
 
-void printBeverage(String name, byte amount) {
+void printBeverage(int bev) {
   lcd.setCursor(0, 0);
   clearLine();
   lcd.setCursor(0, 0);
-  lcd.print(name);
-  lcd.setCursor(name.length(), 0);
+  lcd.print(beverages[bev].printName);
+  lcd.setCursor(beverages[bev].printName.length(), 0);
   lcd.print(":");
   lcd.setCursor(0, 1);
   clearLine();
   lcd.setCursor(0, 1);
-  lcd.print(amount);
+  lcd.print(beverages[bev].count);
 }
 
 void awaitInput() {
   for (int i = 0; i < 100; i++) {
-    bool bPin = digitalRead(beerPin);
-    bool sPin = digitalRead(shotsPin);
-    bool nPin = digitalRead(nonAlcPin);
-    bool lPin = digitalRead(longdrinkPin);
-    if (bPin == HIGH && beerState == LOW) {      
-      beers++;
+    bool bPin = digitalRead(beverages[BEER].pin);
+    bool sPin = digitalRead(beverages[SHOT].pin);
+    bool nPin = digitalRead(beverages[NON_ALCOHOL].pin);
+    bool lPin = digitalRead(beverages[LONGDRINK].pin);
+    if (bPin == HIGH && beverages[BEER].state == LOW) {      
+      beverages[BEER].count++;
       saveProgress();
     }
-    if (sPin == HIGH && shotsState == LOW) {
-      shots++;
+    if (sPin == HIGH && beverages[SHOT].state == LOW) {
+      beverages[SHOT].count++;
       saveProgress();
     }
-    if (nPin == HIGH && nonAlcState == LOW) {
-      non_alcoholics++;
+    if (nPin == HIGH && beverages[NON_ALCOHOL].state == LOW) {
+      beverages[NON_ALCOHOL].count++;
       saveProgress();
     }
-    if (lPin == HIGH && longdrinkState == LOW) {
-      longdrinks++;
+    if (lPin == HIGH && beverages[LONGDRINK].state == LOW) {
+      beverages[LONGDRINK].count++;
       saveProgress();
     }
-    beerState = bPin;
-    shotsState = sPin;
-    nonAlcState = nPin;
-    longdrinkState = lPin;
+    beverages[BEER].state = bPin;
+    beverages[SHOT].state = sPin;
+    beverages[NON_ALCOHOL].state = nPin;
+    beverages[LONGDRINK].state = lPin;
     delay(25);
   }
 }
@@ -125,10 +155,10 @@ void saveProgress() {
   File myFile = SD.open(fileName, FILE_WRITE);
   if (myFile) {
     myFile.seek(0);
-    myFile.write(beers);
-    myFile.write(shots);
-    myFile.write(longdrinks);
-    myFile.write(non_alcoholics);
+    myFile.write(beverages[BEER].count);
+    myFile.write(beverages[SHOT].count);
+    myFile.write(beverages[LONGDRINK].count);
+    myFile.write(beverages[NON_ALCOHOL].count);
     myFile.flush();
     myFile.close();
   }
@@ -139,10 +169,10 @@ void loadProgress() {
   File myFile = SD.open(fileName);
   if (myFile) {
     myFile.seek(0);
-    beers = loadBeverage(myFile);
-    shots = loadBeverage(myFile);
-    longdrinks = loadBeverage(myFile);
-    non_alcoholics = loadBeverage(myFile);   
+    beverages[BEER].count = loadBeverage(myFile);
+    beverages[SHOT].count = loadBeverage(myFile);
+    beverages[LONGDRINK].count = loadBeverage(myFile);
+    beverages[NON_ALCOHOL].count = loadBeverage(myFile);   
     myFile.close();
   }
 }
