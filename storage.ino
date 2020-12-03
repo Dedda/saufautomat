@@ -41,10 +41,12 @@ void saveProgress() {
   if (myFile) {
     Serial.println("yupes");
     myFile.seek(0);
+    StaticJsonDocument<1024> doc;
     for (int beverageId = BEER; beverageId <= NON_ALCOHOL; beverageId++) {
       Beverage bev = beverages[beverageId];
-      myFile.write(bev.count);
+      doc[bev.printName] = bev.count;
     }
+    serializeJson(doc, myFile);
     myFile.flush();
     myFile.close();
   }
@@ -57,10 +59,14 @@ void loadProgress() {
   if (myFile) {
     Serial.println("yuper");
     myFile.seek(0);
-    beverages[BEER].count = loadBeverage(myFile);
-    beverages[SHOT].count = loadBeverage(myFile);
-    beverages[LONGDRINK].count = loadBeverage(myFile);
-    beverages[NON_ALCOHOL].count = loadBeverage(myFile);
+    StaticJsonDocument<1024> doc;
+    DeserializationError error = deserializeJson(doc, myFile);
+    if (error) {
+      return;
+    }
+    for (int bevId = BEER; bevId <= NON_ALCOHOL; bevId++) {
+      beverages[bevId].count = doc[beverages[bevId].printName] | 0;
+    }
     myFile.close();
   }
 }
