@@ -42,6 +42,15 @@ void printBeverage(int bev) {
   lcd.print(beverages[bev].count);
 }
 
+void exportFileNameDisclaimer() {
+  clearScreen();
+  lcd.setCursor(0, 0);
+  lcd.print("Export file:");
+  lcd.setCursor(0, 1);
+  lcd.print(currentFileName());
+  delay(2000);
+}
+
 void newCountDisclaimer(int beverage) {
   Beverage bev = beverages[beverage];
   clearScreen();

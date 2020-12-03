@@ -3,8 +3,10 @@ int fileCounter = 1;
 void initSD() {
   SD.begin(53);
   fileCounter = latestFileCounter();
-  Serial.print("Last file counter: ");
-  Serial.println(fileCounter);
+}
+
+String currentFileName() {
+  return fileNameForCounter(fileCounter);
 }
 
 String fileNameForCounter(int counter) {
@@ -27,13 +29,10 @@ void nextFile() {
 
 void saveProgress() {
   busy();
-  String fileName = fileNameForCounter(fileCounter);
-  SD.remove(fileNameForCounter(fileCounter));
+  String fileName = currentFileName();
+  SD.remove(fileName);
   File myFile = SD.open(fileName, FILE_WRITE);
-  Serial.println("store, File: " + fileName);
   if (myFile) {
-    Serial.println("yupes");
-    myFile.seek(0);
     StaticJsonDocument<1024> doc;
     for (int beverageId = BEER; beverageId <= NON_ALCOHOL; beverageId++) {
       Beverage bev = beverages[beverageId];
@@ -47,11 +46,8 @@ void saveProgress() {
 }
 
 void loadProgress() {
-  Serial.println("read, File: " + fileNameForCounter(fileCounter));
-  File myFile = SD.open(fileNameForCounter(fileCounter));
+  File myFile = SD.open(currentFileName());
   if (myFile) {
-    Serial.println("yuper");
-    myFile.seek(0);
     StaticJsonDocument<1024> doc;
     DeserializationError error = deserializeJson(doc, myFile);
     if (error) {

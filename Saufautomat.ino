@@ -12,7 +12,7 @@ struct Beverage {
   int pin;
   bool state;
   String printName;
-  byte count;
+  int count;
 };
 
 enum beverage{
@@ -64,10 +64,11 @@ void setup() {
   busy();
   pinMode(resetPin, INPUT_PULLUP);
   lcd.begin(16, 2);
-  // bootAnimation();
+  bootAnimation();
   initSD();
   checkReset();
   loadProgress();
+  exportFileNameDisclaimer();
   pinMode(beverages[BEER].pin, INPUT_PULLUP);
   pinMode(beverages[SHOT].pin, INPUT_PULLUP);
   pinMode(beverages[LONGDRINK].pin, INPUT_PULLUP);
