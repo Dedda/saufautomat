@@ -9,7 +9,7 @@ void bootAnimation() {
   lcd.setCursor(0, 0);
   slowPrint("Saufautomat");
   lcd.setCursor(0, 1);
-  slowPrint("v0.1");
+  slowPrint("v1.0");
   delay(1500);
   lcd.setCursor(0, 0);
   slowPrint("Follow me on");
