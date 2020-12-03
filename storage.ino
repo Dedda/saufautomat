@@ -25,13 +25,6 @@ void nextFile() {
   fileCounter++;
 }
 
-byte loadBeverage(File f) {
-  if (f.available()) {
-    return f.read();
-  }
-  return 0;
-}
-
 void saveProgress() {
   busy();
   String fileName = fileNameForCounter(fileCounter);
@@ -46,7 +39,7 @@ void saveProgress() {
       Beverage bev = beverages[beverageId];
       doc[bev.printName] = bev.count;
     }
-    serializeJson(doc, myFile);
+    serializeJsonPretty(doc, myFile);
     myFile.flush();
     myFile.close();
   }
