@@ -46,6 +46,7 @@ void saveProgress() {
 }
 
 void loadProgress() {
+  busy();
   File myFile = SD.open(currentFileName());
   if (myFile) {
     StaticJsonDocument<1024> doc;
@@ -58,4 +59,5 @@ void loadProgress() {
     }
     myFile.close();
   }
+  idle();
 }

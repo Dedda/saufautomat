@@ -37,6 +37,8 @@ const int resetPin = 49;
 
 const int displayTime = 2500;
 
+const int BUSY_LED = 9;
+
 Beverage beverages[N_BEV_TYPES] = {
   Beverage(BEER, "Beers", 16),
   Beverage(SHOT, "Shots", 15),
@@ -76,9 +78,9 @@ void loop() {
 }
 
 void busy() {
-  digitalWrite(9, HIGH);
+  digitalWrite(BUSY_LED, HIGH);
 }
 
 void idle() {
-  digitalWrite(9, LOW);
+  digitalWrite(BUSY_LED, LOW);
 }
