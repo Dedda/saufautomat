@@ -3,6 +3,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <avr/power.h>
+#include "terminal.hpp"
 
 LiquidCrystal lcd(7, 6, 2, 3, 4, 5);
 
@@ -32,8 +33,8 @@ Beverage::Beverage(int type, String label, int pin) {
 }
 
 const int N_BEV_TYPES = NON_ALCOHOL + 1;
-
 const int resetPin = 49;
+const int terminalPin = 10;
 
 const int displayTime = 2500;
 
@@ -49,15 +50,27 @@ Beverage beverages[N_BEV_TYPES] = {
 int currentBeverage = 0;
 
 void setup() {
-  enable_power_saver();
+  // enable_power_saver();
   lcd.begin(16, 2);
   printLoadingBar("Enable Serial", 0);
   Serial.begin(9600);
   while (!Serial) {}
+  Serial.println("Serial up!");
+  Terminal *terminal = new Terminal();
   printLoadingBar("Initialize SD", 30);
+  // terminal();
   pinMode(9, OUTPUT);
-  busy();
+  // busy();
   initSD();
+  pinMode(terminalPin, INPUT_PULLUP);
+  if (digitalRead(terminalPin) == LOW) {
+    clearScreen();
+    lcd.setCursor(0, 0);
+    lcd.print("Maintenance Mode");
+    terminal->run();
+  } else {
+    Serial.println("Skipping debug terminal...");
+  }
   printLoadingBar("Load Progress", 60);
   pinMode(resetPin, INPUT_PULLUP);
   checkReset();
