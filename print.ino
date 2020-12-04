@@ -6,6 +6,7 @@ void slowPrint(String line) {
 }
 
 void bootAnimation() {
+  clearScreen();
   lcd.setCursor(0, 0);
   slowPrint("Saufautomat");
   lcd.setCursor(0, 1);
@@ -27,6 +28,18 @@ void clearScreen() {
   clearLine();
   lcd.setCursor(0, 1);
   clearLine();
+}
+
+void printLoadingBar(String label, int percentage) {
+  percentage = min(percentage, 100);
+  int boxes = percentage * 16 / 100;
+  clearScreen();
+  lcd.setCursor(0, 0);
+  lcd.print(label);
+  lcd.setCursor(0, 1);
+  for (int i = 0; i < boxes; i++) {
+    lcd.print(char(255));
+  }
 }
 
 void printBeverage(int bev) {

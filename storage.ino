@@ -34,7 +34,7 @@ void saveProgress() {
   File myFile = SD.open(fileName, FILE_WRITE);
   if (myFile) {
     StaticJsonDocument<1024> doc;
-    for (int beverageId = 0; beverageId <= N_BEV_TYPES; beverageId++) {
+    for (int beverageId = 0; beverageId < N_BEV_TYPES; beverageId++) {
       Beverage bev = beverages[beverageId];
       doc[bev.printName] = bev.count;
     }
@@ -52,9 +52,10 @@ void loadProgress() {
     StaticJsonDocument<1024> doc;
     DeserializationError error = deserializeJson(doc, myFile);
     if (error) {
+      myFile.close();
       return;
     }
-    for (int bevId = 0; bevId <= N_BEV_TYPES; bevId++) {
+    for (int bevId = 0; bevId < N_BEV_TYPES; bevId++) {
       beverages[bevId].count = doc[beverages[bevId].printName] | 0;
     }
     myFile.close();

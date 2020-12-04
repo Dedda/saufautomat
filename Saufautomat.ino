@@ -49,22 +49,25 @@ Beverage beverages[N_BEV_TYPES] = {
 int currentBeverage = 0;
 
 void setup() {
+  enable_power_saver();
+  lcd.begin(16, 2);
+  printLoadingBar("Enable Serial", 0);
   Serial.begin(9600);
   while (!Serial) {}
-  // enable_power_saver();
-
+  printLoadingBar("Initialize SD", 30);
   pinMode(9, OUTPUT);
   busy();
-  pinMode(resetPin, INPUT_PULLUP);
-  lcd.begin(16, 2);
-  bootAnimation();
   initSD();
+  printLoadingBar("Load Progress", 60);
+  pinMode(resetPin, INPUT_PULLUP);
   checkReset();
   loadProgress();
-  exportFileNameDisclaimer();
+  printLoadingBar("Setting Pins", 90);
   for (int i = 0; i < N_BEV_TYPES; i++) {
     pinMode(beverages[i].pin, INPUT_PULLUP);
   }
+  bootAnimation();
+  exportFileNameDisclaimer();
   idle();
 }
 

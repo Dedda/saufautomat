@@ -1,9 +1,6 @@
 void checkReset() {
   if (digitalRead(resetPin) == LOW) {
-    lcd.setCursor(0, 0);
-    clearLine();
-    lcd.setCursor(0, 1);
-    clearLine();
+    clearScreen();
     while (digitalRead(resetPin) == LOW) {}
     lcd.setCursor(0, 0);
     lcd.print("Reset? Hold");
