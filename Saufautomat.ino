@@ -60,10 +60,9 @@ void setup() {
   checkReset();
   loadProgress();
   exportFileNameDisclaimer();
-  pinMode(beverages[BEER].pin, INPUT_PULLUP);
-  pinMode(beverages[SHOT].pin, INPUT_PULLUP);
-  pinMode(beverages[LONGDRINK].pin, INPUT_PULLUP);
-  pinMode(beverages[NON_ALCOHOL].pin, INPUT_PULLUP);
+  for (int i = 0; i < N_BEV_TYPES; i++) {
+    pinMode(beverages[i].pin, INPUT_PULLUP);
+  }
   idle();
 }
 

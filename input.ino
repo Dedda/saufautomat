@@ -34,35 +34,20 @@ void checkReset() {
 
 void awaitInput() {
   for (int i = 0; i < 100; i++) {
-    bool bPin = digitalRead(beverages[BEER].pin);
-    bool sPin = digitalRead(beverages[SHOT].pin);
-    bool nPin = digitalRead(beverages[NON_ALCOHOL].pin);
-    bool lPin = digitalRead(beverages[LONGDRINK].pin);
+    bool pins[N_BEV_TYPES];
+    for (int i = 0; i < N_BEV_TYPES; i++) {
+      pins[i] = digitalRead(beverages[i].pin);
+    }
     bool save = false;
-    if (bPin == HIGH && beverages[BEER].state == LOW) {
-      beverages[BEER].count++;
-      newCountDisclaimer(BEER);
-      save = true;
+    for (int i = 0; i < N_BEV_TYPES; i++) {
+      if (pins[i] == HIGH && beverages[i].state == LOW) {
+        beverages[i].count++;
+        newCountDisclaimer(i);
+        save = true;
+      }
+      beverages[i].state = pins[i];
     }
-    if (sPin == HIGH && beverages[SHOT].state == LOW) {
-      beverages[SHOT].count++;
-      newCountDisclaimer(SHOT);
-      save = true;
-    }
-    if (nPin == HIGH && beverages[NON_ALCOHOL].state == LOW) {
-      beverages[NON_ALCOHOL].count++;
-      newCountDisclaimer(NON_ALCOHOL);
-      save = true;
-    }
-    if (lPin == HIGH && beverages[LONGDRINK].state == LOW) {
-      beverages[LONGDRINK].count++;
-      newCountDisclaimer(LONGDRINK);
-      save = true;
-    }
-    beverages[BEER].state = bPin;
-    beverages[SHOT].state = sPin;
-    beverages[NON_ALCOHOL].state = nPin;
-    beverages[LONGDRINK].state = lPin;
+
     if (save) {
       saveProgress();
       break;

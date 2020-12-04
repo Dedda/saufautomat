@@ -34,7 +34,7 @@ void saveProgress() {
   File myFile = SD.open(fileName, FILE_WRITE);
   if (myFile) {
     StaticJsonDocument<1024> doc;
-    for (int beverageId = BEER; beverageId <= NON_ALCOHOL; beverageId++) {
+    for (int beverageId = 0; beverageId <= N_BEV_TYPES; beverageId++) {
       Beverage bev = beverages[beverageId];
       doc[bev.printName] = bev.count;
     }
@@ -53,7 +53,7 @@ void loadProgress() {
     if (error) {
       return;
     }
-    for (int bevId = BEER; bevId <= NON_ALCOHOL; bevId++) {
+    for (int bevId = 0; bevId <= N_BEV_TYPES; bevId++) {
       beverages[bevId].count = doc[beverages[bevId].printName] | 0;
     }
     myFile.close();
