@@ -50,27 +50,28 @@ Beverage beverages[N_BEV_TYPES] = {
 int currentBeverage = 0;
 
 void setup() {
-  // enable_power_saver();
-  lcd.begin(16, 2);
-  printLoadingBar("Enable Serial", 0);
-  Serial.begin(9600);
-  while (!Serial) {}
-  Serial.println("Serial up!");
-  Terminal *terminal = new Terminal();
+
+  pinMode(terminalPin, INPUT_PULLUP);
+  if (digitalRead(terminalPin) == LOW) {
+    lcd.begin(16, 2);
+    printLoadingBar("Enable Serial", 0);
+    Serial.begin(9600);
+    while (!Serial) {}
+    clearScreen();
+    lcd.setCursor(0, 0);
+    lcd.print("Maintenance Mode");
+    Terminal *terminal = new Terminal();
+    terminal->run();
+  } else {
+    Serial.println("Skipping debug terminal...");
+    enable_power_saver();
+    lcd.begin(16, 2);
+  }
   printLoadingBar("Initialize SD", 30);
   // terminal();
   pinMode(9, OUTPUT);
   // busy();
   initSD();
-  pinMode(terminalPin, INPUT_PULLUP);
-  if (digitalRead(terminalPin) == LOW) {
-    clearScreen();
-    lcd.setCursor(0, 0);
-    lcd.print("Maintenance Mode");
-    terminal->run();
-  } else {
-    Serial.println("Skipping debug terminal...");
-  }
   printLoadingBar("Load Progress", 60);
   pinMode(resetPin, INPUT_PULLUP);
   checkReset();
