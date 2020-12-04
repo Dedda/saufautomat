@@ -6,51 +6,42 @@
 
 LiquidCrystal lcd(7, 6, 2, 3, 4, 5);
 
-const int N_BEV_TYPES = 4;
-
-struct Beverage {
-  int pin;
-  bool state;
-  String printName;
-  int count;
-};
-
-enum beverage{
+enum beverageType {
   BEER = 0,
   SHOT,
   LONGDRINK,
   NON_ALCOHOL
 };
 
+class Beverage {
+  public:
+    int pin;
+    bool state;
+    String printName;
+    int count;
+    int type;
+    Beverage(int type, String label, int pin);
+};
+
+Beverage::Beverage(int type, String label, int pin) {
+  this->pin = pin;
+  this->type = type;
+  this->printName = label;
+  this->state = HIGH;
+  this->count = 0;
+}
+
+const int N_BEV_TYPES = NON_ALCOHOL + 1;
+
 const int resetPin = 49;
 
 const int displayTime = 2500;
 
 Beverage beverages[N_BEV_TYPES] = {
-  {
-    16,
-    HIGH,
-    "Beers",
-    0
-  },
-  {
-    15,
-    HIGH,
-    "Shots",
-    0
-  },
-  {
-    14,
-    HIGH,
-    "Longdrinks",
-    0
-  },
-  {
-    8,
-    HIGH,
-    "Non alcoholic",
-    0
-  }
+  Beverage(BEER, "Beers", 16),
+  Beverage(SHOT, "Shots", 15),
+  Beverage(LONGDRINK, "Longdrinks", 14),
+  Beverage(NON_ALCOHOL, "Non alcoholic", 8)
 };
 
 int currentBeverage = 0;
