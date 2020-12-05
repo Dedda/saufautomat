@@ -7,16 +7,20 @@ void slowPrint(String line) {
 
 void bootAnimation() {
   clearScreen();
-  lcd.setCursor(0, 0);
-  slowPrint("Saufautomat");
-  lcd.setCursor(0, 1);
-  slowPrint("v1.0");
-  delay(1500);
-  lcd.setCursor(0, 0);
-  slowPrint("Follow me on");
-  lcd.setCursor(0, 1);
-  slowPrint("Github: @Dedda");
-  delay(1500);
+  if (config->splashTime) {
+    lcd.setCursor(0, 0);
+    slowPrint("Saufautomat");
+    lcd.setCursor(0, 1);
+    slowPrint("v1.0");
+    delay(config->splashTime);
+  }
+  if (config->gitHubAdTime) {
+    lcd.setCursor(0, 0);
+    slowPrint("Follow me on");
+    lcd.setCursor(0, 1);
+    slowPrint("Github: @Dedda");
+    delay(config->gitHubAdTime);
+  }
 }
 
 inline void clearLine() {
@@ -56,22 +60,26 @@ void printBeverage(int bev) {
 }
 
 void exportFileNameDisclaimer() {
-  clearScreen();
-  lcd.setCursor(0, 0);
-  lcd.print("Export file:");
-  lcd.setCursor(0, 1);
-  lcd.print(currentFileName());
-  delay(2000);
+  if (config->exportInfoTime) {
+    clearScreen();
+    lcd.setCursor(0, 0);
+    lcd.print("Export file:");
+    lcd.setCursor(0, 1);
+    lcd.print(currentFileName());
+    delay(config->exportInfoTime);
+  }
 }
 
 void newCountDisclaimer(int beverage) {
-  Beverage bev = beverages[beverage];
-  clearScreen();
-  lcd.setCursor(0, 0);
-  lcd.print(bev.printName + ":");
-  lcd.setCursor(0, 1);
-  lcd.print(bev.count);
-  lcd.setCursor(11, 1);
-  lcd.print("WOW!");
-  delay(1500);
+  if (config->wowTime) {
+    Beverage bev = beverages[beverage];
+    clearScreen();
+    lcd.setCursor(0, 0);
+    lcd.print(bev.printName + ":");
+    lcd.setCursor(0, 1);
+    lcd.print(bev.count);
+    lcd.setCursor(11, 1);
+    lcd.print("WOW!");
+    delay(config->wowTime);
+  }
 }

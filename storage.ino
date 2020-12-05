@@ -77,6 +77,10 @@ void loadConfig() {
       return;
     }
     config->rotationSpeed = doc["rotSpeed"];
+    config->splashTime = doc["splashTime"];
+    config->gitHubAdTime = doc["ghAdTime"];
+    config->exportInfoTime = doc["infoTime"];
+    config->wowTime = doc["wowTime"];
     file.close();
   }
   idle();
@@ -89,6 +93,10 @@ void saveConfig() {
   if (file) {
     StaticJsonDocument<1024> doc;
     doc["rotSpeed"] = config->rotationSpeed;
+    doc["splashTime"] = config->splashTime;
+    doc["ghAdTime"] = config->gitHubAdTime;
+    doc["infoTime"] = config->exportInfoTime;
+    doc["wowTime"] = config->wowTime;
     serializeJsonPretty(doc, file);
     file.flush();
     file.close();

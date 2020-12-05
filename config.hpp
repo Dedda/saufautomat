@@ -4,9 +4,14 @@
 class Config {
     public:
         int rotationSpeed;
-        int rotationWaitTime();
+        int splashTime;
+        int gitHubAdTime;
+        int exportInfoTime;
+        int wowTime;
         Config();
-    
+        void list();
+        void setDefault();
+        int rotationWaitTime();
 };
 
 #endif

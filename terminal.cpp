@@ -13,6 +13,10 @@ void runConfigCommand(String);
 void configList();
 void configSet(String);
 void configSetRotationSpeed(String);
+void configSetSplashTime(String);
+void configSetGhAdTime(String);
+void configSetExportInfoTime(String);
+void configSetWowTime(String);
 
 void saveConfig();
 
@@ -157,11 +161,15 @@ String readLine() {
 
 void runConfigCommand(String command) {
     if (command.length() == 0) {
-        Serial.println("Config command:");
+        Serial.println("Config commands:");
         Serial.println("---------------");
-        Serial.println("  list                 show the current configuration");
-        Serial.println("  set default          reset all config values to default");
-        Serial.println("  set rotSpeed [0-2]   set speed for beverage rotation");
+        Serial.println("  list                   show the current configuration");
+        Serial.println("  set default            reset all config values to default");
+        Serial.println("  set rotSpeed [0-2]     set speed for beverage rotation");
+        Serial.println("  set splashTime [0-..]  set time for splash screen");
+        Serial.println("  set ghAdTime [0..]     set time for GitHub commercial break");
+        Serial.println("  set infoTime [0..]     set time for info text about export file");
+        Serial.println("  set wowTime [0..]      set time for congratulations on finished drinks");
     } else if (command.equals(" list")) {
         configList();
     } else if(command.startsWith(" set ")) {
@@ -170,33 +178,81 @@ void runConfigCommand(String command) {
 }
 
 void configList() {
-    Serial.println("Config:");
-    Serial.println("=======");
-    Serial.print("Rotation speed: ");
-    Serial.print(config->rotationSpeed);
-    Serial.print(" (");
-    Serial.print(config->rotationWaitTime());
-    Serial.println("ms)");
+    config->list();
 }
 
 void configSet(String command) {
     if (command.equals("default")) {
-        config = new Config();
+        config->setDefault();
         saveConfig();
     } else if (command.startsWith("rotSpeed ")) {
         configSetRotationSpeed(command.substring(9));
+    } else if (command.startsWith("splashTime ")) {
+        configSetSplashTime(command.substring(11));
+    } else if (command.startsWith("ghAdTime ")) {
+        configSetGhAdTime(command.substring(9));
+    } else if (command.startsWith("infoTime ")) {
+        configSetExportInfoTime(command.substring(9));
+    } else if (command.startsWith("wowTime ")) {
+        configSetWowTime(command.substring(8));
     }
 }
 
-void configSetRotationSpeed(String amount) {
-    for (int i = 0; i < amount.length(); i++) {
-        if (!isDigit(amount[i])) {
-            return;
+bool isNumeric(String s) {
+    for (int i = 0; i < s.length(); i++) {
+        if (!isDigit(s[i])) {
+            return false;
         }
     }
-    int number = amount.toInt();
-    if (number >= 0 && number < 3) {
-        config->rotationSpeed = number;
-        saveConfig();
+    return true;
+}
+
+void configSetRotationSpeed(String amount) {
+    if (isNumeric(amount)) {
+        int number = amount.toInt();
+        if (number >= 0 && number < 3) {
+            config->rotationSpeed = number;
+            saveConfig();
+        }
+    }
+}
+
+void configSetSplashTime(String amount) {
+    if (isNumeric(amount)) {
+        int number = amount.toInt();
+        if (number >= 0) {
+            config->splashTime = number;
+            saveConfig();
+        }
+    }
+}
+
+void configSetGhAdTime(String amount) {
+    if (isNumeric(amount)) {
+        int number = amount.toInt();
+        if (number >= 0) {
+            config->gitHubAdTime = number;
+            saveConfig();
+        }
+    }
+}
+
+void configSetExportInfoTime(String amount) {
+    if (isNumeric(amount)) {
+        int number = amount.toInt();
+        if (number >= 0) {
+            config->exportInfoTime = number;
+            saveConfig();
+        }
+    }
+}
+
+void configSetWowTime(String amount) {
+    if (isNumeric(amount)) {
+        int number = amount.toInt();
+        if (number >= 0) {
+            config->wowTime = number;
+            saveConfig();
+        }
     }
 }
