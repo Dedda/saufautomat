@@ -76,6 +76,7 @@ void setup() {
     lcd.print("Maintenance Mode");
     Terminal *terminal = new Terminal();
     terminal->run();
+    delete terminal;
   }
   busy();
   printLoadingBar("Load Progress", 60);

@@ -34,7 +34,7 @@ void saveProgress() {
   SD.remove(fileName);
   File myFile = SD.open(fileName, FILE_WRITE);
   if (myFile) {
-    StaticJsonDocument<1024> doc;
+    StaticJsonDocument<512> doc;
     for (int beverageId = 0; beverageId < N_BEV_TYPES; beverageId++) {
       Beverage bev = beverages[beverageId];
       doc[bev.printName] = bev.count;
@@ -50,7 +50,7 @@ void loadProgress() {
   busy();
   File myFile = SD.open(currentFileName());
   if (myFile) {
-    StaticJsonDocument<1024> doc;
+    StaticJsonDocument<512> doc;
     DeserializationError error = deserializeJson(doc, myFile);
     if (error) {
       myFile.close();
@@ -69,7 +69,7 @@ void loadConfig() {
   busy();
   File file = SD.open(configFile);
   if (file) {
-    StaticJsonDocument<1024> doc;
+    StaticJsonDocument<512> doc;
     DeserializationError error = deserializeJson(doc, file);
     if (error) {
       file.close();
@@ -91,7 +91,7 @@ void saveConfig() {
   SD.remove(configFile);
   File file = SD.open(configFile, FILE_WRITE);
   if (file) {
-    StaticJsonDocument<1024> doc;
+    StaticJsonDocument<512> doc;
     doc["rotTime"] = config->rotationTime;
     doc["splashTime"] = config->splashTime;
     doc["ghAdTime"] = config->gitHubAdTime;

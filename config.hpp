@@ -3,11 +3,11 @@
 
 class Config {
     public:
-        int rotationTime;
-        int splashTime;
-        int gitHubAdTime;
-        int exportInfoTime;
-        int wowTime;
+        unsigned int rotationTime;
+        unsigned int splashTime;
+        unsigned int gitHubAdTime;
+        unsigned int exportInfoTime;
+        unsigned int wowTime;
         Config();
         void list();
         void setDefault();

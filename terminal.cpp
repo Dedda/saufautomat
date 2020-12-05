@@ -209,7 +209,7 @@ bool isNumeric(String s) {
 
 void configSetRotationTime(String amount) {
     if (isNumeric(amount)) {
-        int number = amount.toInt();
+        unsigned int number = amount.toInt();
         if (number >= 500) {
             config->rotationTime = number;
             saveConfig();
@@ -219,40 +219,32 @@ void configSetRotationTime(String amount) {
 
 void configSetSplashTime(String amount) {
     if (isNumeric(amount)) {
-        int number = amount.toInt();
-        if (number >= 0) {
-            config->splashTime = number;
-            saveConfig();
-        }
+        unsigned int number = amount.toInt();
+        config->splashTime = number;
+        saveConfig();
     }
 }
 
 void configSetGhAdTime(String amount) {
     if (isNumeric(amount)) {
-        int number = amount.toInt();
-        if (number >= 0) {
-            config->gitHubAdTime = number;
-            saveConfig();
-        }
+        unsigned int number = amount.toInt();
+        config->gitHubAdTime = number;
+        saveConfig();
     }
 }
 
 void configSetExportInfoTime(String amount) {
     if (isNumeric(amount)) {
-        int number = amount.toInt();
-        if (number >= 0) {
-            config->exportInfoTime = number;
-            saveConfig();
-        }
+        unsigned int number = amount.toInt();
+        config->exportInfoTime = number;
+        saveConfig();
     }
 }
 
 void configSetWowTime(String amount) {
     if (isNumeric(amount)) {
-        int number = amount.toInt();
-        if (number >= 0) {
-            config->wowTime = number;
-            saveConfig();
-        }
+        unsigned int number = amount.toInt();
+        config->wowTime = number;
+        saveConfig();
     }
 }
