@@ -1,10 +1,20 @@
 #include "terminal.hpp";
+#include "config.hpp"
 #include "HardwareSerial.h"
 #include <SD.h>
+
+extern Config *config;
 
 String readLine();
 String formatFileOrDirectory(File);
 
+// Config commands:
+void runConfigCommand(String);
+void configList();
+void configSet(String);
+void configSetRotationSpeed(String);
+
+void saveConfig();
 
 Terminal::Terminal() {
     _cwd = "/";
@@ -31,6 +41,8 @@ void Terminal::run() {
             _mkdir(command.substring(6));
         } else if (command.startsWith("cat ")) {
             _cat(command.substring(4));
+        } else if (command.startsWith("config")) {
+            runConfigCommand(command.substring(6));
         }
     }
     
@@ -141,4 +153,50 @@ String readLine() {
         delay(3);
     };
     return line;
+}
+
+void runConfigCommand(String command) {
+    if (command.length() == 0) {
+        Serial.println("Config command:");
+        Serial.println("---------------");
+        Serial.println("  list                 show the current configuration");
+        Serial.println("  set default          reset all config values to default");
+        Serial.println("  set rotSpeed [0-2]   set speed for beverage rotation");
+    } else if (command.equals(" list")) {
+        configList();
+    } else if(command.startsWith(" set ")) {
+        configSet(command.substring(5));
+    }
+}
+
+void configList() {
+    Serial.println("Config:");
+    Serial.println("=======");
+    Serial.print("Rotation speed: ");
+    Serial.print(config->rotationSpeed);
+    Serial.print(" (");
+    Serial.print(config->rotationWaitTime());
+    Serial.println("ms)");
+}
+
+void configSet(String command) {
+    if (command.equals("default")) {
+        config = new Config();
+        saveConfig();
+    } else if (command.startsWith("rotSpeed ")) {
+        configSetRotationSpeed(command.substring(9));
+    }
+}
+
+void configSetRotationSpeed(String amount) {
+    for (int i = 0; i < amount.length(); i++) {
+        if (!isDigit(amount[i])) {
+            return;
+        }
+    }
+    int number = amount.toInt();
+    if (number >= 0 && number < 3) {
+        config->rotationSpeed = number;
+        saveConfig();
+    }
 }

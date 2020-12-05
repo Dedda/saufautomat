@@ -3,9 +3,11 @@
 #include <SPI.h>
 #include <SD.h>
 #include <avr/power.h>
+#include "config.hpp"
 #include "terminal.hpp"
 
 LiquidCrystal lcd(7, 6, 2, 3, 4, 5);
+Config *config = new Config();
 
 enum beverageType {
   BEER = 0,
@@ -36,8 +38,6 @@ const int N_BEV_TYPES = NON_ALCOHOL + 1;
 const int resetPin = 49;
 const int terminalPin = 10;
 
-const int displayTime = 2500;
-
 const int BUSY_LED = 9;
 
 Beverage beverages[N_BEV_TYPES] = {
@@ -52,26 +52,32 @@ int currentBeverage = 0;
 void setup() {
 
   pinMode(terminalPin, INPUT_PULLUP);
-  if (digitalRead(terminalPin) == LOW) {
+  bool maintenanceMode = digitalRead(terminalPin) == LOW;
+  if (maintenanceMode) {
     lcd.begin(16, 2);
     printLoadingBar("Enable Serial", 0);
     Serial.begin(9600);
     while (!Serial) {}
-    clearScreen();
-    lcd.setCursor(0, 0);
-    lcd.print("Maintenance Mode");
-    Terminal *terminal = new Terminal();
-    terminal->run();
+
   } else {
     Serial.println("Skipping debug terminal...");
     enable_power_saver();
     lcd.begin(16, 2);
   }
   printLoadingBar("Initialize SD", 30);
-  // terminal();
   pinMode(9, OUTPUT);
-  // busy();
+  busy();
   initSD();
+  loadConfig();
+  idle();
+  if (maintenanceMode) {
+    clearScreen();
+    lcd.setCursor(0, 0);
+    lcd.print("Maintenance Mode");
+    Terminal *terminal = new Terminal();
+    terminal->run();
+  }
+  busy();
   printLoadingBar("Load Progress", 60);
   pinMode(resetPin, INPUT_PULLUP);
   checkReset();

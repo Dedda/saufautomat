@@ -1,4 +1,5 @@
 int fileCounter = 1;
+String configFile = "config.txt";
 
 void initSD() {
   SD.begin(53);
@@ -53,12 +54,44 @@ void loadProgress() {
     DeserializationError error = deserializeJson(doc, myFile);
     if (error) {
       myFile.close();
+      idle();
       return;
     }
     for (int bevId = 0; bevId < N_BEV_TYPES; bevId++) {
       beverages[bevId].count = doc[beverages[bevId].printName] | 0;
     }
     myFile.close();
+  }
+  idle();
+}
+
+void loadConfig() {
+  busy();
+  File file = SD.open(configFile);
+  if (file) {
+    StaticJsonDocument<1024> doc;
+    DeserializationError error = deserializeJson(doc, file);
+    if (error) {
+      file.close();
+      idle();
+      return;
+    }
+    config->rotationSpeed = doc["rotSpeed"];
+    file.close();
+  }
+  idle();
+}
+
+void saveConfig() {
+  busy();
+  SD.remove(configFile);
+  File file = SD.open(configFile, FILE_WRITE);
+  if (file) {
+    StaticJsonDocument<1024> doc;
+    doc["rotSpeed"] = config->rotationSpeed;
+    serializeJsonPretty(doc, file);
+    file.flush();
+    file.close();
   }
   idle();
 }
