@@ -30,7 +30,7 @@ void checkReset() {
 }
 
 void awaitInput() {
-  for (int i = 0; i < 100; i++) {
+  for (int i = 0; i < (config->rotationTime) / 25; i++) {
     bool pins[N_BEV_TYPES];
     for (int i = 0; i < N_BEV_TYPES; i++) {
       pins[i] = digitalRead(beverages[i].pin);

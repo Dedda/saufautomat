@@ -3,7 +3,7 @@
 
 class Config {
     public:
-        int rotationSpeed;
+        int rotationTime;
         int splashTime;
         int gitHubAdTime;
         int exportInfoTime;
@@ -11,7 +11,6 @@ class Config {
         Config();
         void list();
         void setDefault();
-        int rotationWaitTime();
 };
 
 #endif

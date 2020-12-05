@@ -76,7 +76,7 @@ void loadConfig() {
       idle();
       return;
     }
-    config->rotationSpeed = doc["rotSpeed"];
+    config->rotationTime = doc["rotTime"];
     config->splashTime = doc["splashTime"];
     config->gitHubAdTime = doc["ghAdTime"];
     config->exportInfoTime = doc["infoTime"];
@@ -92,7 +92,7 @@ void saveConfig() {
   File file = SD.open(configFile, FILE_WRITE);
   if (file) {
     StaticJsonDocument<1024> doc;
-    doc["rotSpeed"] = config->rotationSpeed;
+    doc["rotTime"] = config->rotationTime;
     doc["splashTime"] = config->splashTime;
     doc["ghAdTime"] = config->gitHubAdTime;
     doc["infoTime"] = config->exportInfoTime;

@@ -12,7 +12,7 @@ String formatFileOrDirectory(File);
 void runConfigCommand(String);
 void configList();
 void configSet(String);
-void configSetRotationSpeed(String);
+void configSetRotationTime(String);
 void configSetSplashTime(String);
 void configSetGhAdTime(String);
 void configSetExportInfoTime(String);
@@ -165,7 +165,7 @@ void runConfigCommand(String command) {
         Serial.println("---------------");
         Serial.println("  list                   show the current configuration");
         Serial.println("  set default            reset all config values to default");
-        Serial.println("  set rotSpeed [0-2]     set speed for beverage rotation");
+        Serial.println("  set rotTime [0-..]     set speed for beverage rotation");
         Serial.println("  set splashTime [0-..]  set time for splash screen");
         Serial.println("  set ghAdTime [0..]     set time for GitHub commercial break");
         Serial.println("  set infoTime [0..]     set time for info text about export file");
@@ -185,8 +185,8 @@ void configSet(String command) {
     if (command.equals("default")) {
         config->setDefault();
         saveConfig();
-    } else if (command.startsWith("rotSpeed ")) {
-        configSetRotationSpeed(command.substring(9));
+    } else if (command.startsWith("rotTime ")) {
+        configSetRotationTime(command.substring(8));
     } else if (command.startsWith("splashTime ")) {
         configSetSplashTime(command.substring(11));
     } else if (command.startsWith("ghAdTime ")) {
@@ -207,11 +207,11 @@ bool isNumeric(String s) {
     return true;
 }
 
-void configSetRotationSpeed(String amount) {
+void configSetRotationTime(String amount) {
     if (isNumeric(amount)) {
         int number = amount.toInt();
-        if (number >= 0 && number < 3) {
-            config->rotationSpeed = number;
+        if (number >= 500) {
+            config->rotationTime = number;
             saveConfig();
         }
     }

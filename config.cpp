@@ -3,36 +3,24 @@
 
 #define ms Serial.println("ms");
 
-int rotationWaitTimes[3] = {
-    1000,
-    1500,
-    2000
-};
-
 Config::Config() {
     setDefault();
 };
 
 void Config::setDefault() {
-    rotationSpeed = 1;
+    rotationTime = 2500;
     splashTime = 1500;
     gitHubAdTime = 1500;
     exportInfoTime = 2000;
     wowTime = 1500;
 }
 
-int Config::rotationWaitTime() {
-    return rotationWaitTimes[rotationSpeed];
-}
-
 void Config::list() {
     Serial.println("Config:");
     Serial.println("=======");
     
-    Serial.print("Rotation speed: ");
-    Serial.print(rotationSpeed);
-    Serial.print(", ");
-    Serial.print(rotationWaitTime());
+    Serial.print("Rotation time: ");
+    Serial.print(rotationTime);
     ms
     Serial.print("Splash screen time: ");
     Serial.print(splashTime);
