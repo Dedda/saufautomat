@@ -2,12 +2,14 @@ void enable_power_saver() {
 
     power_adc_disable();
     power_usart0_disable();
+    #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
     power_usart2_disable();
-    power_timer1_disable();
-    power_timer2_disable();
     power_timer3_disable();
     power_timer4_disable();
     power_timer5_disable();
+    #endif
+    power_timer1_disable();
+    power_timer2_disable();
     power_twi_disable();
 
     // turn off on board LED to save some power
@@ -26,6 +28,7 @@ void turnOffAnalogPins() {
   pinMode(A5, OUTPUT);
   pinMode(A6, OUTPUT);
   pinMode(A7, OUTPUT);
+  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
   pinMode(A8, OUTPUT);
   pinMode(A9, OUTPUT);
   pinMode(A10, OUTPUT);
@@ -34,6 +37,8 @@ void turnOffAnalogPins() {
   pinMode(A13, OUTPUT);
   pinMode(A14, OUTPUT);
   pinMode(A15, OUTPUT);
+  #endif
+  
   digitalWrite(A0, LOW);
   digitalWrite(A1, LOW);
   digitalWrite(A2, LOW);
@@ -42,6 +47,7 @@ void turnOffAnalogPins() {
   digitalWrite(A5, LOW);
   digitalWrite(A6, LOW);
   digitalWrite(A7, LOW);
+  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
   digitalWrite(A8, LOW);
   digitalWrite(A9, LOW);
   digitalWrite(A10, LOW);
@@ -50,6 +56,7 @@ void turnOffAnalogPins() {
   digitalWrite(A13, LOW);
   digitalWrite(A14, LOW);
   digitalWrite(A15, LOW);
+  #endif
 }
 
 void turnOffDigitalPins() {
