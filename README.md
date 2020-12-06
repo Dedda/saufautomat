@@ -21,6 +21,7 @@ The status LED (or busy indicator) is connected to pin 9. This LED is not requir
 - Non-alcoholic --> 14
 - Longdrinks --> 8
 - Reset --> 49
+- Debug Terminal --> 10
 
 ### SD-Card
 
