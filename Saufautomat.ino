@@ -78,10 +78,10 @@ void setup() {
     terminal->run();
     delete terminal;
   }
-  busy();
   printLoadingBar("Load Progress", 60);
   pinMode(resetPin, INPUT_PULLUP);
   checkReset();
+  busy();
   loadProgress();
   printLoadingBar("Setting Pins", 90);
   for (int i = 0; i < N_BEV_TYPES; i++) {
