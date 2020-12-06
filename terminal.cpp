@@ -1,5 +1,6 @@
-#include "terminal.hpp";
+#include "terminal.hpp"
 #include "config.hpp"
+#include "dump.h"
 #include "HardwareSerial.h"
 #include <SD.h>
 
@@ -17,6 +18,8 @@ void configSetSplashTime(String);
 void configSetGhAdTime(String);
 void configSetExportInfoTime(String);
 void configSetWowTime(String);
+
+void dump();
 
 void saveConfig();
 
@@ -47,6 +50,8 @@ void Terminal::run() {
             _cat(command.substring(4));
         } else if (command.startsWith("config")) {
             runConfigCommand(command.substring(6));
+        } else if (command.equals("dump")) {
+            dump();
         }
     }
     
@@ -247,4 +252,8 @@ void configSetWowTime(String amount) {
         config->wowTime = number;
         saveConfig();
     }
+}
+
+void dump() {
+    dumpSerial();
 }

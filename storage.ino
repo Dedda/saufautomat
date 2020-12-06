@@ -1,5 +1,7 @@
 int fileCounter = 1;
 String configFile = "config.txt";
+String counterFileNamePrefix = "Alc_";
+String counterFileExtension = ".txt";
 
 void initSD() {
   SD.begin(53);
@@ -11,7 +13,7 @@ String currentFileName() {
 }
 
 String fileNameForCounter(int counter) {
-  return "Alc_" + String(counter) + ".txt";
+  return counterFileNamePrefix + String(counter) + counterFileExtension;
 }
 
 int latestFileCounter() {
