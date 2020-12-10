@@ -1,5 +1,5 @@
 void slowPrint(String line) {
-  for (int i = 0; i < line.length(); i++) {
+  for (byte i = 0; i < line.length(); i++) {
       lcd.print(line[i]);
       delay(50);
   }
@@ -34,19 +34,19 @@ void clearScreen() {
   clearLine();
 }
 
-void printLoadingBar(String label, int percentage) {
+void printLoadingBar(String label, byte percentage) {
   percentage = min(percentage, 100);
-  int boxes = percentage * 16 / 100;
+  byte boxes = percentage * 16 / 100;
   clearScreen();
   lcd.setCursor(0, 0);
   lcd.print(label);
   lcd.setCursor(0, 1);
-  for (int i = 0; i < boxes; i++) {
+  for (byte i = 0; i < boxes; i++) {
     lcd.print(char(255));
   }
 }
 
-void printBeverage(int bev) {
+void printBeverage(byte bev) {
   lcd.setCursor(0, 0);
   clearLine();
   lcd.setCursor(0, 0);
@@ -70,7 +70,7 @@ void exportFileNameDisclaimer() {
   }
 }
 
-void newCountDisclaimer(int beverage) {
+void newCountDisclaimer(byte beverage) {  
   if (config->wowTime) {
     Beverage bev = beverages[beverage];
     clearScreen();
@@ -78,8 +78,9 @@ void newCountDisclaimer(int beverage) {
     lcd.print(bev.printName + ":");
     lcd.setCursor(0, 1);
     lcd.print(bev.count);
-    lcd.setCursor(11, 1);
-    lcd.print("WOW!");
+    lcd.setCursor(9, 1);
+    lcd.write(beverage);
+    lcd.print(" WOW!");
     delay(config->wowTime);
   }
 }

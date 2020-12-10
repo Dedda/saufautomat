@@ -28,7 +28,7 @@ void turnOffAnalogPins() {
   pinMode(A5, OUTPUT);
   pinMode(A6, OUTPUT);
   pinMode(A7, OUTPUT);
-  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
   pinMode(A8, OUTPUT);
   pinMode(A9, OUTPUT);
   pinMode(A10, OUTPUT);
@@ -37,7 +37,7 @@ void turnOffAnalogPins() {
   pinMode(A13, OUTPUT);
   pinMode(A14, OUTPUT);
   pinMode(A15, OUTPUT);
-  #endif
+#endif
   
   digitalWrite(A0, LOW);
   digitalWrite(A1, LOW);
@@ -47,7 +47,7 @@ void turnOffAnalogPins() {
   digitalWrite(A5, LOW);
   digitalWrite(A6, LOW);
   digitalWrite(A7, LOW);
-  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
   digitalWrite(A8, LOW);
   digitalWrite(A9, LOW);
   digitalWrite(A10, LOW);
@@ -56,11 +56,11 @@ void turnOffAnalogPins() {
   digitalWrite(A13, LOW);
   digitalWrite(A14, LOW);
   digitalWrite(A15, LOW);
-  #endif
+#endif
 }
 
 void turnOffDigitalPins() {
-  for (int i = 0; i < 54; i++) {
+  for (byte i = 0; i < 54; i++) {
     pinMode(i, OUTPUT);
     digitalWrite(i, LOW);
   }

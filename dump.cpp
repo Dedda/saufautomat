@@ -2,10 +2,10 @@
 #include "HardwareSerial.h"
 #include <SD.h>
 
-String fileNameForCounter(int counter);
+String fileNameForCounter(byte counter);
 
 void dumpSerial() {
-    int counter = 1;
+    byte counter = 1;
     while(true) {
         String fileName = fileNameForCounter(counter);
         File file = SD.open(fileName);
