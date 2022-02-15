@@ -9,7 +9,7 @@
 LiquidCrystal lcd(7, 6, 2, 3, 4, 5);
 Config *config = new Config();
 
-const byte iconBeer[] = {
+const byte iconBeer[8] = {
   B00000,
   B11100,
   B11110,
@@ -118,11 +118,11 @@ void setup() {
     enable_power_saver();
     lcd.begin(16, 2);
   }
-  lcd.createChar(BEER, iconBeer);
-  lcd.createChar(SHOT, iconShot);
-  lcd.createChar(LONGDRINK, iconLongdrink);
-  lcd.createChar(COCKTAIL, iconCocktail);
-  lcd.createChar(NON_ALCOHOL, iconNonAlcohol);
+  lcd.createChar(BEER, (uint8_t *) iconBeer);
+  lcd.createChar(SHOT, (uint8_t *) iconShot);
+  lcd.createChar(LONGDRINK, (uint8_t *) iconLongdrink);
+  lcd.createChar(COCKTAIL, (uint8_t *) iconCocktail);
+  lcd.createChar(NON_ALCOHOL, (uint8_t *) iconNonAlcohol);
   printLoadingBar("Initialize SD", 30);
   initSD();
   loadConfig();
