@@ -133,7 +133,7 @@ void loop() {
 // Real logic
 bool maintenanceStartupCheck() {
   pinMode(BTN_TERMINAL, INPUT_PULLUP);
-  bool maintenanceMode = digitalRead(terminalPin) == LOW;
+  bool maintenanceMode = digitalRead(BTN_TERMINAL) == LOW;
   if (maintenanceMode) {
     lcd.begin(16, 2);
     printLoadingBar("Enable Serial", 0);
