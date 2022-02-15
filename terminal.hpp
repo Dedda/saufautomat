@@ -1,6 +1,7 @@
 #ifndef TERMINAL
 #define TERMINAL
 
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 #include <WString.h>
 
 class Terminal {
@@ -16,5 +17,5 @@ class Terminal {
         void _mkdir(String path);
         void _cat(String path);
 };
-
+#endif
 #endif

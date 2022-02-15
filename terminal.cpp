@@ -1,3 +1,4 @@
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 #include "terminal.hpp"
 #include "config.hpp"
 #include "dump.h"
@@ -257,3 +258,4 @@ void configSetWowTime(String amount) {
 void dump() {
     dumpSerial();
 }
+#endif

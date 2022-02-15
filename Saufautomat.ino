@@ -105,43 +105,19 @@ Beverage beverages[N_BEV_TYPES] = {
 byte currentBeverage = 0;
 
 void setup() {
-
-  pinMode(terminalPin, INPUT_PULLUP);
-  bool maintenanceMode = digitalRead(terminalPin) == LOW;
-  if (maintenanceMode) {
-    lcd.begin(16, 2);
-    printLoadingBar("Enable Serial", 0);
-    Serial.begin(9600);
-    while (!Serial) {}
-  } else {
-    Serial.println("Skipping debug terminal...");
-    enable_power_saver();
-    lcd.begin(16, 2);
-  }
-  lcd.createChar(BEER, (uint8_t *) iconBeer);
-  lcd.createChar(SHOT, (uint8_t *) iconShot);
-  lcd.createChar(LONGDRINK, (uint8_t *) iconLongdrink);
-  lcd.createChar(COCKTAIL, (uint8_t *) iconCocktail);
-  lcd.createChar(NON_ALCOHOL, (uint8_t *) iconNonAlcohol);
+  bool maintenanceMode = maintenanceStartupCheck();  
+  createBeverageChars();
   printLoadingBar("Initialize SD", 30);
   initSD();
   loadConfig();
   if (maintenanceMode) {
-    clearScreen();
-    lcd.setCursor(0, 0);
-    lcd.print("Maintenance Mode");    
-    Terminal *terminal = new Terminal();
-    terminal->run();
-    delete terminal;
+    runMaintenanceTerminal();
   }
   printLoadingBar("Load Progress", 60);
   pinMode(resetPin, INPUT_PULLUP);
   checkReset();
   loadProgress();
-  printLoadingBar("Setting Pins", 90);
-  for (byte i = 0; i < N_BEV_TYPES; i++) {
-    pinMode(beverages[i].pin, INPUT_PULLUP);
-  }
+  setupBeveragePins();
   bootAnimation();
   exportFileNameDisclaimer();
 }
@@ -153,4 +129,51 @@ void loop() {
   }
   printBeverage(currentBeverage);
   awaitInput();
+}
+
+// Real logic
+bool maintenanceStartupCheck() {
+  pinMode(terminalPin, INPUT_PULLUP);
+  bool maintenanceMode = digitalRead(terminalPin) == LOW;
+  if (maintenanceMode) {
+    lcd.begin(16, 2);
+    printLoadingBar("Enable Serial", 0);
+    startSerial();
+  } else {
+    Serial.println("Skipping debug terminal...");
+    enable_power_saver();
+    lcd.begin(16, 2);
+  }
+  return maintenanceMode;
+}
+
+void startSerial() {
+  Serial.begin(9600);
+  while (!Serial) {}
+}
+
+void createBeverageChars() {
+  lcd.createChar(BEER, (uint8_t *) iconBeer);
+  lcd.createChar(SHOT, (uint8_t *) iconShot);
+  lcd.createChar(LONGDRINK, (uint8_t *) iconLongdrink);
+  lcd.createChar(COCKTAIL, (uint8_t *) iconCocktail);
+  lcd.createChar(NON_ALCOHOL, (uint8_t *) iconNonAlcohol);
+}
+
+void runMaintenanceTerminal() {
+  clearScreen();
+  lcd.setCursor(0, 0);
+  lcd.print("Maintenance Mode");    
+  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+  Terminal *terminal = new Terminal();
+  terminal->run();
+  delete terminal;
+  #endif 
+}
+
+void setupBeveragePins() {
+  printLoadingBar("Setting Pins", 90);
+  for (byte i = 0; i < N_BEV_TYPES; i++) {
+    pinMode(beverages[i].pin, INPUT_PULLUP);
+  }
 }
