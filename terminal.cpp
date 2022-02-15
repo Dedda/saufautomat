@@ -28,7 +28,7 @@ Terminal::Terminal() {
 }
 
 void Terminal::run() {
-    Serial.setTimeout(60*1000);
+    Serial.setTimeout(30*1000);
     while (true)
     {
         Serial.println(_cwd + "> ");
