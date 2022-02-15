@@ -1,4 +1,3 @@
-#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 #include "terminal.hpp"
 #include "config.hpp"
 #include "dump.h"
@@ -36,7 +35,10 @@ void Terminal::run() {
         String command = readLine();
         if (command.equals("exit")) {
             Serial.println("Bye!");
-            break;
+            break;    
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+        } else if (command.startsWith("cat ")) {
+            _cat(command.substring(4));
         } else if (command.equals("ls")) {
             _ls("");
         } else if (command.startsWith("ls ")) {
@@ -47,8 +49,7 @@ void Terminal::run() {
             _rm(command.substring(3));
         } else if (command.startsWith("mkdir ")) {
             _mkdir(command.substring(6));
-        } else if (command.startsWith("cat ")) {
-            _cat(command.substring(4));
+#endif        
         } else if (command.startsWith("config")) {
             runConfigCommand(command.substring(6));
         } else if (command.equals("dump")) {
@@ -65,17 +66,23 @@ String Terminal::_path(String file) {
     return file;
 }
 
-void Terminal::_cd(String dir) {
-    dir = _path(dir);
-    File file = SD.open(dir);
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+
+void Terminal::_cat(String path) {
+    path = _path(path);
+    File file = SD.open(path);
     if (file) {
-        if (file.isDirectory()) {
-            _cwd = dir;
+        if (!file.isDirectory()) {
+            while (file.available()) {
+                Serial.write(file.read());
+            }
+            Serial.print('\n');
         } else {
-            Serial.println(dir + " is not a directory");
+            Serial.println("Cannot cat directory!");
         }
+        file.close();
     } else {
-        Serial.println(dir + " does not exist");
+        Serial.println(path + " does not exist");
     }
 }
 
@@ -102,6 +109,20 @@ void Terminal::_ls(String path) {
     Serial.flush();
 }
 
+void Terminal::_cd(String dir) {
+    dir = _path(dir);
+    File file = SD.open(dir);
+    if (file) {
+        if (file.isDirectory()) {
+            _cwd = dir;
+        } else {
+            Serial.println(dir + " is not a directory");
+        }
+    } else {
+        Serial.println(dir + " does not exist");
+    }
+}
+
 void Terminal::_rm(String path) {
     path = _path(path);
     File file = SD.open(path);
@@ -119,24 +140,7 @@ void Terminal::_mkdir(String path) {
     path = _path(path);
     SD.mkdir(path);
 }
-
-void Terminal::_cat(String path) {
-    path = _path(path);
-    File file = SD.open(path);
-    if (file) {
-        if (!file.isDirectory()) {
-            while (file.available()) {
-                Serial.write(file.read());
-            }
-            Serial.print('\n');
-        } else {
-            Serial.println("Cannot cat directory!");
-        }
-        file.close();
-    } else {
-        Serial.println(path + " does not exist");
-    }
-}
+#endif
 
 String formatFileOrDirectory(File f) {
     if (f) {
@@ -258,4 +262,3 @@ void configSetWowTime(String amount) {
 void dump() {
     dumpSerial();
 }
-#endif

@@ -163,12 +163,10 @@ void createBeverageChars() {
 void runMaintenanceTerminal() {
   clearScreen();
   lcd.setCursor(0, 0);
-  lcd.print("Maintenance Mode");    
-  #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+  lcd.print("Maintenance Mode");      
   Terminal *terminal = new Terminal();
   terminal->run();
-  delete terminal;
-  #endif 
+  delete terminal;  
 }
 
 void setupBeveragePins() {
