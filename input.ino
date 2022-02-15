@@ -1,7 +1,7 @@
 void checkReset() {
-  if (digitalRead(resetPin) == LOW) {
+  if (digitalRead(BTN_RESET) == LOW) {
     clearScreen();
-    while (digitalRead(resetPin) == LOW) {}
+    while (digitalRead(BTN_RESET) == LOW) {}
     lcd.setCursor(0, 0);
     lcd.print("Reset? Hold");
     lcd.setCursor(0, 1);
@@ -9,10 +9,10 @@ void checkReset() {
     bool abort = false;
     for (byte i = 0; i < 80; i++) {
       delay(25);
-      if (digitalRead(resetPin) == LOW) {
+      if (digitalRead(BTN_RESET) == LOW) {
         for (byte i = 0; i < 80; i++) {
           delay(25);
-          if (digitalRead(resetPin) == HIGH) {
+          if (digitalRead(BTN_RESET) == HIGH) {
             abort = true;
             break;
           }
