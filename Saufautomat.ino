@@ -3,10 +3,11 @@
 #include <SPI.h>
 #include <SD.h>
 #include <avr/power.h>
+#include "pins.h"
 #include "config.hpp"
 #include "terminal.hpp"
 
-LiquidCrystal lcd(7, 6, 2, 3, 4, 5);
+LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 Config *config = new Config();
 
 const byte iconBeer[8] = {
@@ -91,15 +92,13 @@ Beverage::Beverage(byte type, String label, byte pin) {
 }
 
 const byte N_BEV_TYPES = NON_ALCOHOL + 1;
-const byte resetPin = 49;
-const byte terminalPin = 10;
 
 Beverage beverages[N_BEV_TYPES] = {
-  Beverage(BEER, "Beers", 16),
-  Beverage(SHOT, "Shots", 15),
-  Beverage(LONGDRINK, "Longdrinks", 14),
-  Beverage(COCKTAIL, "Cocktails", 17),
-  Beverage(NON_ALCOHOL, "Non alcoholic", 8)
+  Beverage(BEER, "Beers", BTN_BEER),
+  Beverage(SHOT, "Shots", BTN_SHOTS),
+  Beverage(LONGDRINK, "Longdrinks", BTN_LONGDRINK),
+  Beverage(COCKTAIL, "Cocktails", BTN_COCKTAIL),
+  Beverage(NON_ALCOHOL, "Non alcoholic", BTN_NON_ALCOHOL)
 };
 
 byte currentBeverage = 0;
@@ -114,7 +113,7 @@ void setup() {
     runMaintenanceTerminal();
   }
   printLoadingBar("Load Progress", 60);
-  pinMode(resetPin, INPUT_PULLUP);
+  pinMode(BTN_RESET, INPUT_PULLUP);
   checkReset();
   loadProgress();
   setupBeveragePins();
@@ -133,7 +132,7 @@ void loop() {
 
 // Real logic
 bool maintenanceStartupCheck() {
-  pinMode(terminalPin, INPUT_PULLUP);
+  pinMode(BTN_TERMINAL, INPUT_PULLUP);
   bool maintenanceMode = digitalRead(terminalPin) == LOW;
   if (maintenanceMode) {
     lcd.begin(16, 2);

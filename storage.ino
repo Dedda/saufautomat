@@ -1,10 +1,16 @@
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+#define DOCUMENT_SIZE 512
+#else
+#define DOCUMENT_SIZE 256
+#endif
+
 byte fileCounter = 1;
 const String configFile = "config.txt";
 const String counterFileNamePrefix = "Alc_";
 const String counterFileExtension = ".txt";
 
 void initSD() {
-  SD.begin(53);
+  SD.begin(SD_DATA);
   fileCounter = latestFileCounter();
 }
 
@@ -35,7 +41,7 @@ void saveProgress() {
   SD.remove(fileName);
   File myFile = SD.open(fileName, FILE_WRITE);
   if (myFile) {
-    StaticJsonDocument<512> doc;
+    StaticJsonDocument<DOCUMENT_SIZE> doc;
     for (byte beverageId = 0; beverageId < N_BEV_TYPES; beverageId++) {
       Beverage bev = beverages[beverageId];
       doc[bev.printName] = bev.count;
@@ -49,7 +55,7 @@ void saveProgress() {
 void loadProgress() {
   File myFile = SD.open(currentFileName());
   if (myFile) {
-    StaticJsonDocument<512> doc;
+    StaticJsonDocument<DOCUMENT_SIZE> doc;
     DeserializationError error = deserializeJson(doc, myFile);
     if (error) {
       myFile.close();
@@ -65,7 +71,7 @@ void loadProgress() {
 void loadConfig() {
   File file = SD.open(configFile);
   if (file) {
-    StaticJsonDocument<512> doc;
+    StaticJsonDocument<DOCUMENT_SIZE> doc;
     DeserializationError error = deserializeJson(doc, file);
     if (error) {
       file.close();
@@ -84,7 +90,7 @@ void saveConfig() {
   SD.remove(configFile);
   File file = SD.open(configFile, FILE_WRITE);
   if (file) {
-    StaticJsonDocument<512> doc;
+    StaticJsonDocument<DOCUMENT_SIZE> doc;
     doc["rotTime"] = config->rotationTime;
     doc["splashTime"] = config->splashTime;
     doc["ghAdTime"] = config->gitHubAdTime;
