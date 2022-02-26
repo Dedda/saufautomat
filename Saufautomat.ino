@@ -43,34 +43,22 @@ const byte iconLongdrink[] = {
   B01110,
 };
 
-const byte iconCocktail[] = {
+const byte iconTeeKaffee[] = {
   B00000,
+  B00000,
+  B00000,
+  B11100,
   B11111,
-  B01110,
-  B00100,
-  B00100,
-  B00100,
-  B00100,
+  B11101,
   B11111,
-};
-
-const byte iconNonAlcohol[] = {
-  B01110,
-  B10011,
-  B10011,
-  B10101,
-  B10101,
-  B11001,
-  B11001,
-  B01110,
+  B11100,
 };
 
 enum beverageType: byte {
   BEER = 0,
   SHOT,
   LONGDRINK,
-  COCKTAIL,
-  NON_ALCOHOL
+  TEE_KAFFEE
 };
 
 class Beverage {
@@ -91,14 +79,13 @@ Beverage::Beverage(byte type, String label, byte pin) {
   this->count = 0;
 }
 
-const byte N_BEV_TYPES = NON_ALCOHOL + 1;
+const byte N_BEV_TYPES = TEE_KAFFEE + 1;
 
 Beverage beverages[N_BEV_TYPES] = {
   Beverage(BEER, "Beers", BTN_BEER),
   Beverage(SHOT, "Shots", BTN_SHOTS),
   Beverage(LONGDRINK, "Longdrinks", BTN_LONGDRINK),
-  Beverage(COCKTAIL, "Cocktails", BTN_COCKTAIL),
-  Beverage(NON_ALCOHOL, "Non alcoholic", BTN_NON_ALCOHOL)
+  Beverage(TEE_KAFFEE, "Tee/Kaffee", BTN_TEE_KAFFEE)
 };
 
 byte currentBeverage = 0;
@@ -155,8 +142,7 @@ void createBeverageChars() {
   lcd.createChar(BEER, (uint8_t *) iconBeer);
   lcd.createChar(SHOT, (uint8_t *) iconShot);
   lcd.createChar(LONGDRINK, (uint8_t *) iconLongdrink);
-  lcd.createChar(COCKTAIL, (uint8_t *) iconCocktail);
-  lcd.createChar(NON_ALCOHOL, (uint8_t *) iconNonAlcohol);
+  lcd.createChar(TEE_KAFFEE, (uint8_t *) iconTeeKaffee);
 }
 
 void runMaintenanceTerminal() {

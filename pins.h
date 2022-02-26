@@ -13,13 +13,12 @@
 #define LCD_RS 7
 
 // Beverages
-#define BTN_BEER 16
+#define BTN_BEER 14
 #define BTN_SHOTS 15
-#define BTN_LONGDRINK 8
-#define BTN_COCKTAIL 17
-#define BTN_NON_ALCOHOL 14
+#define BTN_LONGDRINK 16
+#define BTN_TEE_KAFFEE 17
 
-#define BTN_RESET 49
+#define BTN_RESET 47
 
 #define SD_DATA 53
 
@@ -40,8 +39,7 @@
 #define BTN_BEER 14
 #define BTN_SHOTS 15
 #define BTN_LONGDRINK 16
-#define BTN_COCKTAIL 17
-#define BTN_NON_ALCOHOL 18
+#define BTN_TEE_KAFFEE 17
 
 #define BTN_RESET 19
 
