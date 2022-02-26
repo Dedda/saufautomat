@@ -105,6 +105,7 @@ void setup() {
   loadProgress();
   setupBeveragePins();
   bootAnimation();
+  printIconSet();
   exportFileNameDisclaimer();
 }
 
@@ -131,6 +132,17 @@ bool maintenanceStartupCheck() {
     lcd.begin(16, 2);
   }
   return maintenanceMode;
+}
+
+void printIconSet() {
+  clearScreen();
+  lcd.setCursor(0, 0);
+  lcd.print("Icon set:");
+  lcd.setCursor(0, 1);
+  for (byte i = BEER; i < N_BEV_TYPES; i++) {
+    lcd.write(i);
+  }
+  delay(config->splashTime);
 }
 
 void startSerial() {
